@@ -21,7 +21,7 @@ public class FakeDatabase {
 	private final TreeMap<Long, Pedido> PEDIDOS = new TreeMap<>();
 
 	private FakeDatabase() {
-		
+		init();
 	}
 	
 	public static FakeDatabase getInstance() {

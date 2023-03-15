@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
 import com.sinensia.polloshermanos.backend.business.model.Empleado;
 import com.sinensia.polloshermanos.backend.business.services.EmpleadoServices;
 import com.sinensia.polloshermanos.backend.integration.utils.FakeDatabase;
 
+@Service
 public class EmpleadoServicesImpl implements EmpleadoServices {
 
 	private FakeDatabase fakeDatabse = FakeDatabase.getInstance();
