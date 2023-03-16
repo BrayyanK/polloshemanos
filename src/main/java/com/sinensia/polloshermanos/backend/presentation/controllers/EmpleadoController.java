@@ -28,7 +28,7 @@ public class EmpleadoController {
 		return empleadoServices.findAll();
 	}
 	
-	@GetMapping("/empleados/dni")
+	@GetMapping("/empleados/{dni}")
 	public Empleado getByDni(@PathVariable String dni) {
 		
 		Empleado empleado = empleadoServices.read(dni);
