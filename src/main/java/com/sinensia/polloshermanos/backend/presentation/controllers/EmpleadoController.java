@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.sinensia.polloshermanos.backend.business.model.Empleado;
 import com.sinensia.polloshermanos.backend.business.services.EmpleadoServices;
+import com.sinensia.polloshermanos.backend.presentation.config.PresentationException;
 
 @RestController
 public class EmpleadoController {
@@ -26,29 +28,28 @@ public class EmpleadoController {
 		return empleadoServices.findAll();
 	}
 	
-	@GetMapping("/empleados/{kukuku}")
-	public ResponseEntity<?> getByDni(@PathVariable("kukuku") String dni) {
+	@GetMapping("/empleados/dni")
+	public Empleado getByDni(@PathVariable String dni) {
 		
 		Empleado empleado = empleadoServices.read(dni);
 		
 		if(empleado == null) {
-			return ResponseEntity.notFound().build();
+			throw new PresentationException("No se existe el empleado con código [" + dni + "]", HttpStatus.NOT_FOUND);
 		} 
 		
-		return new ResponseEntity<>(empleado, HttpStatus.OK);
+		return empleado;
 	}
 	
 	@PostMapping("/empleados")
-	public ResponseEntity<?> create(@RequestBody Empleado empleado){
+	public ResponseEntity<?> create(@RequestBody Empleado empleado, UriComponentsBuilder ucb){
 		
 		try {
 			empleadoServices.create(empleado);
-		} catch (Exception e) {
-			String error = e.getMessage();
-			return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+		} catch (IllegalStateException e) {
+			throw new PresentationException(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		
-		return new ResponseEntity<>("Se ha creado el empleado " + empleado.getDni(), HttpStatus.OK);
+		return ResponseEntity.created(ucb.path("/empleados/{dni}").build(empleado.getDni())).build();
 	}
 	
 	@PutMapping("/empleados")
@@ -57,11 +58,10 @@ public class EmpleadoController {
 		try {
 			empleadoServices.update(empleado);
 		} catch (Exception e) {
-			String error = e.getMessage();
-			return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+			throw new PresentationException(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		
-		return new ResponseEntity<>("Se ha actualizado el empleado " + empleado.getDni(), HttpStatus.OK);
+		return ResponseEntity.accepted().build();
 	}
 	
 
