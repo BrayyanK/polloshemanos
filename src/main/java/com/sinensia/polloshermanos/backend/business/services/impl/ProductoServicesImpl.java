@@ -1,20 +1,26 @@
 package com.sinensia.polloshermanos.backend.business.services.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.sinensia.polloshermanos.backend.business.model.Familia;
 import com.sinensia.polloshermanos.backend.business.model.Producto;
 import com.sinensia.polloshermanos.backend.business.services.ProductoServices;
 import com.sinensia.polloshermanos.backend.integration.utils.FakeDatabase;
 
+@Service
 public class ProductoServicesImpl implements ProductoServices {
 
-	private FakeDatabase fakeDatabse = FakeDatabase.getInstance();
+	@Autowired
+	private FakeDatabase fakeDatabse;
 	
 	@Override
 	public Producto create(Producto producto) {
@@ -54,8 +60,7 @@ public class ProductoServicesImpl implements ProductoServices {
 			throw new IllegalStateException("El producto con código " + codigo + " no existe.");
 		}
 		
-		fakeDatabse.getProductosMap().replace(codigo, producto);
-		
+		fakeDatabse.getProductosMap().replace(codigo, producto);	
 	}
 
 	@Override
@@ -68,103 +73,75 @@ public class ProductoServicesImpl implements ProductoServices {
 		}
 		
 		fakeDatabse.getProductosMap().remove(codigo);
-		
 	}
 
 	@Override
 	public List<Producto> findAll() {
 		return new ArrayList<>(fakeDatabse.getProductosMap().values());
 	}
-
+	
 	@Override
 	public List<Producto> findBetweenDates(Date desde, Date hasta) {
 		
-		List<Producto> productos = new ArrayList<>();
-		
-		for(Producto producto: fakeDatabse.getProductosMap().values()) {
-			if(producto.getFechaAlta().after(desde) && producto.getFechaAlta().before(hasta)) {
-				productos.add(producto);
-			}
-		}
-		
-		return productos;
+		return fakeDatabse.getProductosMap().values().stream()
+				.filter(x -> x.getFechaAlta().after(desde) && x.getFechaAlta().before(hasta))
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	public List<Producto> findBetweenPriceRange(double min, double max) {
 		
-		List<Producto> productos = new ArrayList<>();
-		
-		for(Producto producto: fakeDatabse.getProductosMap().values()) {
-			if(producto.getPrecio() >= min && producto.getPrecio() <= max) {
-				productos.add(producto);
-			}
-		}
-		
-		return productos;
+		return fakeDatabse.getProductosMap().values().stream()
+				.filter(x -> x.getPrecio() >= min && x.getPrecio() <= max)
+				.collect(Collectors.toList());
+			
 	}
-
+	
 	@Override
 	public List<Producto> findByFamilia(Familia familia) {
 		
-		List<Producto> productos = new ArrayList<>();
-		
-		for(Producto producto: fakeDatabse.getProductosMap().values()) {
-			if(producto.getFamilia() == familia) {
-				productos.add(producto);
-			}
-		}
-		
-		return productos;
+		return fakeDatabse.getProductosMap().values().stream()
+				.filter(x -> x.getFamilia() == familia)
+				.collect(Collectors.toList());
 	}
+
 
 	@Override
 	public List<Producto> findDescatalogados() {
 		
-		List<Producto> productos = new ArrayList<>();
-		
-		for(Producto producto: fakeDatabse.getProductosMap().values()) {
-			if(producto.isDescatalogado()) {
-				productos.add(producto);
-			}
-		}
-		
-		return productos;
+		return fakeDatabse.getProductosMap().values().stream()
+				.filter(x -> x.isDescatalogado())
+				.collect(Collectors.toList());
 	}
 
 	public List<Producto> findByNombreLikeIgnoreCase(String nombre) {
 		
-		List<Producto> productos = new ArrayList<>();
-		
 		if(nombre == null) {
-			return productos;
+			return new ArrayList<>();
 		}
 		
-		nombre = nombre.toUpperCase();
+		String nombreUpper = nombre.toUpperCase();
 		
-		for(Producto producto: fakeDatabse.getProductosMap().values()) {
-		
-			String nombreProducto = producto.getNombre();
-			
-			if(nombreProducto != null && nombreProducto.toUpperCase().contains(nombre)) {
-				productos.add(producto);
-			}
-		}
-		
-		return productos;
+		return fakeDatabse.getProductosMap().values().stream()
+				.filter(x -> {
+					
+					String strNombre = x.getNombre() != null ? x.getNombre().toUpperCase() : "";
+				
+					return strNombre.contains(nombreUpper);
+	
+				})
+				.collect(Collectors.toList());
 	}
 
 	@Override
 	public void incrementarPreciosByFamilia(Familia familia, double incremento) {
 		
-		for(Producto producto: fakeDatabse.getProductosMap().values()) {
-			if(producto.getFamilia() == familia) {
-				double precio = producto.getPrecio();
-				precio = precio + (precio * incremento / 100);
-				producto.setPrecio(precio);
-			}
-		}
-		
+		fakeDatabse.getProductosMap().values().stream()
+			.filter(x -> x.getFamilia() == familia)
+			.forEach(x -> {
+				double precio = x.getPrecio();
+				x.setPrecio(precio + (precio * incremento / 100));
+		});	
 	}
 
 	@Override
@@ -175,111 +152,38 @@ public class ProductoServicesImpl implements ProductoServices {
 	@Override
 	public int getNumeroTotalProductosByFamilia(Familia familia) {
 		
-		int contador = 0;
-		
-		for(Producto producto: fakeDatabse.getProductosMap().values()) {
-			if (producto.getFamilia() == familia) {
-				contador++;
-			}
-		}
-		
-		return contador;
+		return (int)fakeDatabse.getProductosMap().values().stream()
+				.filter(x -> x.getFamilia() == familia)
+				.count();
 	}
 	
 	@Override
 	public Map<Familia, Integer> getEstadisticaNumeroProductosByFamilia() {
 		
-		Map<Familia, Integer> estadistica = new HashMap<>();
+		Map<Familia, Integer> resultado = fakeDatabse.getProductosMap().values().stream()
+				  .collect(Collectors.groupingBy(Producto::getFamilia, Collectors.summingInt(e -> 1)));
+				  
+		Arrays.asList(Familia.values()).stream().forEach(x -> resultado.putIfAbsent(x, 0));
+	
+		return resultado;
 		
-		for(Familia familia: Familia.values()) {
-			estadistica.put(familia, 0);
-		}
-		
-		for(Producto producto: fakeDatabse.getProductosMap().values()) {
-			Familia familia = producto.getFamilia();
-			
-			Integer cantidadProductos = estadistica.get(familia);
-			cantidadProductos = cantidadProductos + 1;
-			estadistica.replace(familia, cantidadProductos);
-		}
-		
-		return estadistica;
 	}
 
 	@Override
 	public Map<Familia, Double> getEstadisticaPrecioMedioProductosByFamilia() {
-
-		Map<Familia, Double> estadisticaFamilias = new HashMap<>();
 		
-		int contComida = 0;
-		int contRefresco = 0;
-		int contCerveza = 0;
-		int contLicor = 0; 
-		int contTapa = 0;
-		int contCafe = 0;
-		int contPostre = 0;
-		int contBocadillo = 0;
-
-		double precioComida = 0.0;
-		double precioRefresco = 0.0;
-		double precioCerveza = 0.0;
-		double precioLicor = 0.0;
-		double precioTapa = 0.0;
-		double precioCafe = 0.0;
-		double precioPostre = 0.0;
-		double precioBocadillo = 0.0;
-
-		for (Producto producto : fakeDatabse.getProductosMap().values()) {
-	
-			switch (producto.getFamilia()) {
-
-			case COMIDA:
-				contComida++;
-				precioComida += producto.getPrecio();
-				break;
-			case REFRESCO:
-				contRefresco++;
-				precioRefresco += producto.getPrecio();
-				break;
-			case CERVEZA:
-				contCerveza++;
-				precioCerveza += producto.getPrecio();
-				break;
-			case LICOR:
-				contLicor++;
-				precioLicor += producto.getPrecio();
-				break;
-			case TAPA:
-				contTapa++;
-				precioTapa += producto.getPrecio();
-				break;
-			case CAFE:
-				contCafe++;
-				precioCafe += producto.getPrecio();
-				break;
-			case POSTRE:
-				contPostre++;
-				precioPostre += producto.getPrecio();
-				break;
-			case BOCADILLO:
-				contBocadillo++;
-				precioBocadillo += producto.getPrecio();
-				break;
-
-			}
-
-		}
+		Map<Familia, Double> resultado = fakeDatabse.getProductosMap().values().stream()
+				  .collect(Collectors.groupingBy(Producto::getFamilia, Collectors.averagingDouble(Producto::getPrecio)));
 		
-		estadisticaFamilias.put(Familia.COMIDA, contComida == 0 ? null: precioComida/contComida);
-		estadisticaFamilias.put(Familia.REFRESCO, precioRefresco == 0 ? null: precioRefresco/contRefresco);
-		estadisticaFamilias.put(Familia.CERVEZA, precioCerveza == 0 ? null: precioCerveza/contCerveza);
-		estadisticaFamilias.put(Familia.LICOR, precioLicor == 0 ? null: precioLicor/contLicor);
-		estadisticaFamilias.put(Familia.TAPA, precioTapa == 0 ? null: precioTapa/contTapa);
-		estadisticaFamilias.put(Familia.CAFE, precioCafe == 0 ? null: precioCafe/contCafe);
-		estadisticaFamilias.put(Familia.POSTRE, precioPostre == 0 ? null: precioPostre/contPostre);
-		estadisticaFamilias.put(Familia.BOCADILLO, precioBocadillo == 0 ? null: precioBocadillo/contBocadillo);
+		Arrays.asList(Familia.values()).stream().forEach(x -> resultado.putIfAbsent(x, null));
 		
-		return estadisticaFamilias;
-	
+		return resultado;
 	}
+
+	@Override
+	public List<Familia> getFamilias() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

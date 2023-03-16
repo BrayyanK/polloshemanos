@@ -34,5 +34,7 @@ public interface ProductoServices {
 	
 	Map<Familia, Integer> getEstadisticaNumeroProductosByFamilia();
 	Map<Familia, Double> getEstadisticaPrecioMedioProductosByFamilia();
+	
+	List<Familia> getFamilias();
 
 }

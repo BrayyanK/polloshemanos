@@ -11,12 +11,13 @@ import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.sinensia.polloshermanos.backend.business.model.Familia;
 import com.sinensia.polloshermanos.backend.business.model.Producto;
 import com.sinensia.polloshermanos.backend.business.services.ProductoServices;
-import com.sinensia.polloshermanos.backend.integration.utils.FakeDatabase;
 
+@SpringBootTest
 class ProductoServicesImplTest {
 
 	private ProductoServices productoServices;
@@ -28,9 +29,8 @@ class ProductoServicesImplTest {
 	private Producto p5;
 	
 	@BeforeEach
-	void beforeEach() {
-		productoServices = new ProductoServicesStreamsImpl();
-		FakeDatabase.getInstance().init();
+	void beforeEach() throws Exception {
+		productoServices = new ProductoServicesImpl();
 		initObjects();	
 	}
 	

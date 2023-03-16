@@ -2,8 +2,8 @@ package com.sinensia.polloshermanos.backend.business.services.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.sinensia.polloshermanos.backend.business.model.Empleado;
@@ -13,7 +13,8 @@ import com.sinensia.polloshermanos.backend.integration.utils.FakeDatabase;
 @Service
 public class EmpleadoServicesImpl implements EmpleadoServices {
 
-	private FakeDatabase fakeDatabse = FakeDatabase.getInstance();
+	@Autowired
+	private FakeDatabase fakeDatabse;
 	
 	@Override
 	public void create(Empleado empleado) {
@@ -50,6 +51,8 @@ public class EmpleadoServicesImpl implements EmpleadoServices {
 			throw new IllegalStateException("No existe el empleado con dni " + dni);
 		}
 		
+		fakeDatabse.getEmpleadosMap().replace(empleado.getDni(), empleado);
+		
 	}
 
 	@Override
@@ -60,33 +63,41 @@ public class EmpleadoServicesImpl implements EmpleadoServices {
 	@Override
 	public List<Empleado> findByNombreLikeIgnoreCase(String texto) {
 		
-		final String textoUpper = texto != null ? texto.toUpperCase() : null; 
-	
-		return fakeDatabse.getEmpleadosMap().values().stream()
-				
-				.filter(x -> {
-					
-					String nombre = x.getNombre() != null ? x.getNombre().toUpperCase() : "";
-					String apellido1 = x.getApellido1() != null ? x.getApellido1().toUpperCase() : "";
-					String apellido2 = x.getApellido2() != null ? x.getApellido2().toUpperCase() : "";	
-					
-					return(nombre.contains(textoUpper) || apellido1.contains(textoUpper) || apellido2.contains(textoUpper));
-					
-				})
-				.collect(Collectors.toList());
+		List<Empleado> empleados = new ArrayList<>();
+		
+		texto = texto != null ? texto.toUpperCase() : null; 
+		
+		for(Empleado empleado : fakeDatabse.getEmpleadosMap().values()) {
+			
+			String nombre = empleado.getNombre() != null ? empleado.getNombre().toUpperCase() : "";
+			String apellido1 = empleado.getApellido1() != null ? empleado.getApellido1().toUpperCase() : "";
+			String apellido2 = empleado.getApellido2() != null ? empleado.getApellido2().toUpperCase() : "";
+			
+			if(nombre.contains(texto) || apellido1.contains(texto) || apellido2.contains(texto)) {
+				empleados.add(empleado);
+			}
+		}
+		
+		return empleados;
 	}
-	
+
 	@Override
 	public int getNumeroTotalEmpleados() {
 		return fakeDatabse.getEmpleadosMap().size();
 	}
-	
+
 	@Override
 	public int getNumeroTotalEmpleadosActivos() {
 		
-		return (int) fakeDatabse.getEmpleadosMap().values().stream()
-				.filter(x -> x.isActivo())
-				.count();
+		int numeroTotalEmpleadosActivos = 0;
+		
+		for (Empleado empleado: fakeDatabse.getEmpleadosMap().values()) {
+			if(empleado.isActivo()) {
+				numeroTotalEmpleadosActivos++;
+			}
+		}
+		
+		return numeroTotalEmpleadosActivos;
 	}
 	
 }

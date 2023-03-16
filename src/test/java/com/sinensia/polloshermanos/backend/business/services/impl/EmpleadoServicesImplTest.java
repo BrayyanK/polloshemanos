@@ -8,19 +8,19 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import com.sinensia.polloshermanos.backend.business.model.Empleado;
 import com.sinensia.polloshermanos.backend.business.services.EmpleadoServices;
-import com.sinensia.polloshermanos.backend.integration.utils.FakeDatabase;
 
+@SpringBootTest
 class EmpleadoServicesImplTest {
 
 	private EmpleadoServices empleadoServices;
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		empleadoServices = new EmpleadoServicesStreamsImpl();
-		FakeDatabase.getInstance().init();
+		empleadoServices = new EmpleadoServicesImpl();
 	}
 
 	@Test
