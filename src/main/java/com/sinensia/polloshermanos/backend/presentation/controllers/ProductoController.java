@@ -33,8 +33,7 @@ public class ProductoController {
 			productoServices.delete(codigo);
 		} catch(IllegalStateException e) {
 			throw new PresentationException(e.getMessage(), HttpStatus.NOT_FOUND);
-		}
-		
+		}	
 	}
 
 }
