@@ -1,0 +1,42 @@
+- Nos interesa crear una auditoría de todas las veces que nos puden productos
+- El end-point que queremos auditar es:
+
+GET /productos
+
+- Para cada petición guardaremos el timestamp junto con la IP.
+
+TIMESTAMP        IP
+============*===========
+10024433335	  10.250.3.4
+10024433337	  10.250.3.4
+10024433345	  10.250.6.4
+10024456677	  10.250.3.4
+10024456678	  10.250.3.5
+10024456679	  10.250.3.9
+
+
+Map<Long, Peticion>
+
+- Vamos a necesitar un servicio de auditoria. 
+- Vamos a necesitar un modelo (POJO) para las peticiones
+
+La clase Peticion puede tener los atributos codigo(Long) y la IP
+
+AuditoriaServices
+
+public void create(Peticion);
+public List<Peticion> getAll();
+
+- Podemos cream un controlador para auditoria que nos devuelve una lista de todas las peticiones
+
+GET /peticiones
+
+[{
+	codigo:35567665,
+	ip:"10.20.145.44"},
+{
+},{
+
+},{}]
+
+
