@@ -1,0 +1,13 @@
+
+
+1.- Creamos POJO
+2.- Creamos tabla en schema.sql
+3.- Creamos datos de ejemplo en data.sql
+
+4.- Anotamos el POJO (convertimo el POJO en una Entity)
+
+* En el proceso de anotacion, ponemos a @Transient todos aquellos atributos que no sabemos como maperar y vamos resolviendo poco a poco
+
+5.- Creamos el repositorio.
+6.- Creamos el controlador con una prueba GET getAll()
+

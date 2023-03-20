@@ -5,8 +5,11 @@ import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.Entity;
+
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="CANCIONES")
@@ -17,8 +20,12 @@ public class Cancion  implements Serializable{
 	private String isbn;
 	
 	private String titulo;
+
 	private Genero genero;
+	
+	@Temporal(TemporalType.DATE)
 	private Date fecha;
+	
 	private int duracion; // segundos
 	
 	public Cancion() {
