@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.Transient;
+
 public class Pedido implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -12,6 +14,10 @@ public class Pedido implements Serializable {
 	private Date fechaHora;
 	private Empleado empleado;
 	private EstadoPedido estado;
+	
+	
+	// ESTO NO!!!!
+	@Transient
 	private List<LineaPedido> lineas;
 	
 	public Pedido() {
