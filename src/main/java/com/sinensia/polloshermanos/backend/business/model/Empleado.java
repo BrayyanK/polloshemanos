@@ -3,10 +3,18 @@ package com.sinensia.polloshermanos.backend.business.model;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="EMPLEADOS")
 public class Empleado implements Serializable {
 	private static final long serialVersionUID = 3L;
 
+	@Id
 	private String dni;
+	
 	private String nombre;
 	private String apellido1;
 	private String apellido2;
