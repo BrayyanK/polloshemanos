@@ -11,3 +11,10 @@
 5.- Creamos el repositorio.
 6.- Creamos el controlador con una prueba GET getAll()
 
+
+==================================
+
+Para mirar la consola:
+
+http://localhost:8080/h2-console
+
