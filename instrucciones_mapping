@@ -1,20 +1,10 @@
+1.- Mapeamos Entity
+2.- Creamos el repositorio
+3.- Utilizamos el repositorio en la implementación de business
 
 
-1.- Creamos POJO
-2.- Creamos tabla en schema.sql
-3.- Creamos datos de ejemplo en data.sql
+Por ejemplo
 
-4.- Anotamos el POJO (convertimo el POJO en una Entity)
-
-* En el proceso de anotacion, ponemos a @Transient todos aquellos atributos que no sabemos como maperar y vamos resolviendo poco a poco
-
-5.- Creamos el repositorio.
-6.- Creamos el controlador con una prueba GET getAll()
-
-
-==================================
-
-Para mirar la consola:
-
-http://localhost:8080/h2-console
-
+1.- Mapeamos Producto
+2.- Cremos ProductoRepository
+3.- Utilizamos ProductoRepository en ProductoServicesImpl

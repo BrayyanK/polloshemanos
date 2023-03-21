@@ -5,19 +5,23 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.Transient;
-
 public class Pedido implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	// TODO
+	
+	// Mapear integramente Pedido
+	// 1.- El código se generará automáticamente a través de un secuenciador
+	// 2.- El empleado hay que mapearlo. O es @OneToMany o @ManyToOne
+	// 3.- las lineas son @ElementCollection
+	
+	// Observaciones: - Creamos tablas con datos de ejemplo
+	//                - Inyectamos el repository en el controlador de pruebas 
 	
 	private Long codigo;
 	private Date fechaHora;
 	private Empleado empleado;
 	private EstadoPedido estado;
-	
-	
-	// ESTO NO!!!!
-	@Transient
 	private List<LineaPedido> lineas;
 	
 	public Pedido() {

@@ -1,4 +1,4 @@
-package com.sinensia.polloshermanos.backend.business.services.impl;
+package com.sinensia.polloshermanos.backend.business.services.dummy.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +16,7 @@ import com.sinensia.polloshermanos.backend.business.services.PedidoServices;
 import com.sinensia.polloshermanos.backend.integration.utils.FakeDatabase;
 
 @Service
-public class PedidoServicesImpl implements PedidoServices{
+public class PedidoServicesDummyImpl implements PedidoServices{
 
 	@Autowired
 	private FakeDatabase fakeDatabse;

@@ -4,15 +4,40 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+@Table(name="PRODUCTOS")
 public class Producto implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	private Long codigo;       
+	@Id
+	@SequenceGenerator(name = "PRODUCTO_SEQ", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="PRODUCTO_SEQ")
+	private Long codigo;  
+	
 	private String nombre;
 	private String descripcion;
+	
+	@Temporal(TemporalType.DATE)
 	private Date fechaAlta;
+	
 	private double precio;
+	
+	@Enumerated(EnumType.STRING)
 	private Familia familia;
+	
+	@Column(columnDefinition = "TINYINT")
 	private boolean descatalogado;
 
 	public Producto() {
