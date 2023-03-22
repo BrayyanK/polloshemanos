@@ -5,13 +5,44 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+@Entity
+@Table(name="PEDIDOS")
 public class Pedido implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@SequenceGenerator(name = "PEDIDOS_SEQ", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="PEDIDOS_SEQ")
 	private Long codigo;
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaHora;
+	
+	@ManyToOne
+	@JoinColumn(name="DNI_EMPLEADO")
 	private Empleado empleado;
+	
+	@Enumerated(EnumType.STRING)
 	private EstadoPedido estado;
+	
+	@ElementCollection
+	@CollectionTable(name = "LINEAS_PEDIDO", 
+			         joinColumns = @JoinColumn(name = "CODIGO_PEDIDO"))
 	private List<LineaPedido> lineas;
 	
 	public Pedido() {

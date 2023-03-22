@@ -3,17 +3,22 @@ package com.sinensia.polloshermanos.backend.business.services.impl;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.sinensia.polloshermanos.backend.business.model.EstadoPedido;
 import com.sinensia.polloshermanos.backend.business.model.Pedido;
 import com.sinensia.polloshermanos.backend.business.services.PedidoServices;
+import com.sinensia.polloshermanos.backend.integration.repositories.PedidoRepository;
 
 @Service
 @Primary
 public class PedidoServicesImpl implements PedidoServices{
 
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	
 	@Override
 	public Pedido create(Pedido pedido) {
 		// TODO Auto-generated method stub
@@ -58,8 +63,7 @@ public class PedidoServicesImpl implements PedidoServices{
 
 	@Override
 	public List<Pedido> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return pedidoRepository.findAll();
 	}
 
 	@Override

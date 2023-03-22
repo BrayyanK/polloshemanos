@@ -19,6 +19,8 @@ public class EmpleadoServicesImpl implements EmpleadoServices{
 	
 	@Override
 	public void create(Empleado empleado) {
+		
+		empleadoRepository.save(empleado);
 		// TODO Auto-generated method stub
 		
 	}
