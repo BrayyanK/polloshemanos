@@ -26,8 +26,8 @@ public class Pedido implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name = "PEDIDOS_SEQ", initialValue = 1, allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="PEDIDOS_SEQ")
+	@SequenceGenerator(name = "PEDIDO_SEQ", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="PEDIDO_SEQ")
 	private Long codigo;
 	
 	@Temporal(TemporalType.TIMESTAMP)

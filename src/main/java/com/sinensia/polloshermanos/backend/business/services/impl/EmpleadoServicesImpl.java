@@ -2,6 +2,8 @@ package com.sinensia.polloshermanos.backend.business.services.impl;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -18,22 +20,43 @@ public class EmpleadoServicesImpl implements EmpleadoServices{
 	private EmpleadoRepository empleadoRepository;
 	
 	@Override
+	@Transactional
 	public void create(Empleado empleado) {
 		
+		if(empleado.getDni() == null) {
+			throw new IllegalStateException("No se puede crear un empleado con dni null");
+		}
+		
+		boolean existe = empleadoRepository.existsById(empleado.getDni());
+		
+		if(existe) {
+			throw new IllegalStateException("El empleado " + empleado.getDni() + " ya existe");
+		}
+		
 		empleadoRepository.save(empleado);
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public Empleado read(String dni) {
-		// TODO Auto-generated method stub
-		return null;
+		return empleadoRepository.findById(dni).orElse(null);
 	}
 
 	@Override
+	@Transactional
 	public void update(Empleado empleado) {
-		// TODO Auto-generated method stub
+		
+		if(empleado.getDni() == null) {
+			throw new IllegalStateException("No se puede actualizar un empleado con dni null");
+		}
+		
+		boolean existe = empleadoRepository.existsById(empleado.getDni());
+		
+		if(!existe) {
+			throw new IllegalStateException("El empleado " + empleado.getDni() + " no existe");
+		}
+		
+		empleadoRepository.save(empleado);
 		
 	}
 
@@ -44,20 +67,17 @@ public class EmpleadoServicesImpl implements EmpleadoServices{
 
 	@Override
 	public List<Empleado> findByNombreLikeIgnoreCase(String texto) {
-		// TODO Auto-generated method stub
-		return null;
+		return empleadoRepository.findByNombreContainingIgnoreCase(texto);
 	}
 
 	@Override
 	public int getNumeroTotalEmpleados() {
-		// TODO Auto-generated method stub
-		return 0;
+		return (int) empleadoRepository.count();
 	}
 
 	@Override
 	public int getNumeroTotalEmpleadosActivos() {
-		// TODO Auto-generated method stub
-		return 0;
+		return (int) empleadoRepository.getNumeroTotalEmpleados(true);
 	}
 
 }
