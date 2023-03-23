@@ -37,7 +37,8 @@ public class ProductoController {
 	public void delete(@PathVariable Long codigo) {
 		
 		try {
-			productoServices.delete(codigo);
+			//productoServices.delete(codigo);
+			// TODO Eliminar consistirá en actualizar propiedad descatalogado a TRUE
 		} catch(IllegalStateException e) {
 			throw new PresentationException(e.getMessage(), HttpStatus.NOT_FOUND);
 		}	

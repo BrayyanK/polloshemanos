@@ -12,7 +12,6 @@ public interface ProductoServices {
 	Producto create(Producto producto);		// C
 	Producto read(Long codigo);				// R
 	void update(Producto producto);			// U
-	void delete(Long codigo);				// D
 	
 	List<Producto> findAll();
 	List<Producto> findBetweenDates(Date desde, Date hasta);

@@ -1,8 +1,11 @@
 package com.sinensia.polloshermanos.backend.business.services.impl;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -21,27 +24,32 @@ public class ProductoServicesImpl implements ProductoServices {
 	private ProductoRepository productoRepository;
 	
 	@Override
+	@Transactional
 	public Producto create(Producto producto) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(producto.getCodigo() != null) {
+			throw new IllegalStateException("Para crear un producto el código ha de ser null");
+		}
+	
+		return productoRepository.save(producto);
 	}
 
 	@Override
 	public Producto read(Long codigo) {
-		// TODO Auto-generated method stub
-		return null;
+		return productoRepository.findById(codigo).orElse(null);
 	}
 
 	@Override
+	@Transactional
 	public void update(Producto producto) {
-		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public void delete(Long codigo) {
-		// TODO Auto-generated method stub
+		boolean existe = productoRepository.existsById(producto.getCodigo());
 		
+		if(!existe) {
+			throw new IllegalStateException("No existe el producto con código " + producto.getCodigo());
+		}
+		
+		productoRepository.save(producto);
 	}
 
 	@Override
@@ -51,32 +59,27 @@ public class ProductoServicesImpl implements ProductoServices {
 
 	@Override
 	public List<Producto> findBetweenDates(Date desde, Date hasta) {
-		// TODO Auto-generated method stub
-		return null;
+		return productoRepository.findByFechaAltaBetween(desde, hasta);
 	}
 
 	@Override
 	public List<Producto> findBetweenPriceRange(double min, double max) {
-		// TODO Auto-generated method stub
-		return null;
+		return productoRepository.findByPrecioBetween(min, max);
 	}
 
 	@Override
 	public List<Producto> findByFamilia(Familia familia) {
-		// TODO Auto-generated method stub
-		return null;
+		return productoRepository.findByFamilia(familia);
 	}
 
 	@Override
 	public List<Producto> findDescatalogados() {
-		// TODO Auto-generated method stub
-		return null;
+		return productoRepository.findDescatalogados();
 	}
 
 	@Override
 	public List<Producto> findByNombreLikeIgnoreCase(String nombre) {
-		// TODO Auto-generated method stub
-		return null;
+		return productoRepository.findByNombreContainingIgnoreCase(nombre);
 	}
 
 	@Override
@@ -87,14 +90,12 @@ public class ProductoServicesImpl implements ProductoServices {
 
 	@Override
 	public int getNumeroTotalProductos() {
-		// TODO Auto-generated method stub
-		return 0;
+		return (int) productoRepository.count();
 	}
 
 	@Override
 	public int getNumeroTotalProductosByFamilia(Familia familia) {
-		// TODO Auto-generated method stub
-		return 0;
+		return (int) productoRepository.getNumeroTotalProductosByFamilia(familia);
 	}
 
 	@Override
@@ -111,8 +112,7 @@ public class ProductoServicesImpl implements ProductoServices {
 
 	@Override
 	public List<Familia> getFamilias() {
-		// TODO Auto-generated method stub
-		return null;
+		return Arrays.asList(Familia.values());
 	}
 
 }

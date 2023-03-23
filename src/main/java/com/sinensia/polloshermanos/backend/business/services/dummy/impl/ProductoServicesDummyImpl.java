@@ -64,18 +64,6 @@ public class ProductoServicesDummyImpl implements ProductoServices {
 	}
 
 	@Override
-	public void delete(Long codigo) {
-		
-		boolean existe = fakeDatabse.getProductosMap().containsKey(codigo);
-		
-		if(!existe) {
-			throw new IllegalStateException("El producto " + codigo + " no existe.");
-		}
-		
-		fakeDatabse.getProductosMap().remove(codigo);
-	}
-
-	@Override
 	public List<Producto> findAll() {
 		return new ArrayList<>(fakeDatabse.getProductosMap().values());
 	}
