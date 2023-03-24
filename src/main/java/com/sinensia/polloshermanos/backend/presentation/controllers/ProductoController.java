@@ -2,8 +2,6 @@ package com.sinensia.polloshermanos.backend.presentation.controllers;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,14 +19,9 @@ public class ProductoController {
 
 	@Autowired
 	private ProductoServices productoServices;
-	
-	private  Logger logger = LoggerFactory.getLogger(ProductoController.class);
-	
+
 	@GetMapping("/productos")
 	public List<Producto> getAll(){
-		
-		logger.info("Me piden todos los productos");
-
 		return productoServices.findAll();
 	}
 	

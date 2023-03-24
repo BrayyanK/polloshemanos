@@ -1,0 +1,23 @@
+
+1.- Crear un endpoint en ProductoController para obtener un listado de productos paginado.
+
+ - Hay que hacer el correspondiente test!
+ 
+2.- Si completamos lo anterior, podemos hacer que los resulatados del end-point anterior vengan filtrados por familia
+
+3.- Obtener un listado de ProductoDTO1. Este DTO tiene dos atributos;
+
+codigo             producto 
+===========        ===============================
+00554192334		   [CAFE] Café con leche (2.6)
+00000193555		   [CAFE] Café solo (1.5)
+00000924552		   [COMIDA] Pollo con arroz (12.0)
+
+public class ProductoDTO1 {
+
+	private String codigo; (20 caracteres completando ceros a la izquierda)
+	private String producto;
+
+...
+
+}

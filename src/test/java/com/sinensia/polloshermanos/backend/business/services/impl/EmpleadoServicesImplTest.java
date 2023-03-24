@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 
 import com.sinensia.polloshermanos.backend.business.model.Empleado;
+import com.sinensia.polloshermanos.backend.business.model.dtos.EmpleadoDTO1;
+import com.sinensia.polloshermanos.backend.business.model.dtos.EmpleadoDTO2;
 import com.sinensia.polloshermanos.backend.business.services.EmpleadoServices;
 
 @SpringBootTest
@@ -156,9 +158,6 @@ class EmpleadoServicesImplTest {
 		
 	}
 	
-	
-	
-
 	@Test
 	void testFindAll() {
 		
@@ -199,6 +198,34 @@ class EmpleadoServicesImplTest {
 		int numeroEmpleadosActivos = empleadoServices.getNumeroTotalEmpleadosActivos();
 		
 		assertEquals(3, numeroEmpleadosActivos);
+		
+	}
+	
+	@Test
+	void testListadoEmpleadoDTO1() {
+		EmpleadoDTO1 empleadoDTO1 = new EmpleadoDTO1();
+		empleadoDTO1.setNombreCompleto("CIFUENTES MERINO, CARLOTA");
+		
+		List<EmpleadoDTO1> empleadosDTO1 = empleadoServices.getEmpleadosDTO1();
+		
+		assertNotNull(empleadosDTO1);
+		assertEquals(4, empleadosDTO1.size());
+	
+		assertTrue(empleadosDTO1.contains(empleadoDTO1));
+		
+	}
+	
+	@Test
+	void testListadoEmpleadoDTO2() {
+		
+		EmpleadoDTO2 empleadoDTO2 = new EmpleadoDTO2("37667523F", "Cifuentes", "Merino", "Carlota");
+		
+		List<EmpleadoDTO2> empleadosDTO2 = empleadoServices.getEmpleadosDTO2();
+		
+		assertNotNull(empleadosDTO2);
+		assertEquals(4, empleadosDTO2.size());
+	
+		assertTrue(empleadosDTO2.contains(empleadoDTO2));
 		
 	}
 	

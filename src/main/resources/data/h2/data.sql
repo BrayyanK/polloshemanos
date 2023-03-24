@@ -11,7 +11,21 @@ INSERT INTO EMPLEADOS (DNI, NOMBRE, APELLIDO1, APELLIDO2, ACTIVO) VALUES
 ('37667523F', 'Carlota', 'Cifuentes', 'Merino', TRUE),
 ('45899212H', 'Anna', 'Roca', 'Arderiu', TRUE),
 ('20098127Y', 'Fernando', 'Gimeno', 'Losada', FALSE),
-('19822376G', 'Japón', 'Sevilla', 'Uriarte', TRUE); 
+('19822376G', 'Japón', 'Sevilla', 'Uriarte', TRUE),
+('00000001Y', 'Apellido1 1', 'Apellido2 1', 'Nombre 1', FALSE),
+('00000002Y', 'Apellido1 2', 'Apellido2 2', 'Nombre 2', FALSE),
+('00000003Y', 'Apellido1 3', 'Apellido2 3', 'Nombre 3', FALSE),
+('00000004Y', 'Apellido1 4', 'Apellido2 4', 'Nombre 4', FALSE),
+('00000005Y', 'Apellido1 5', 'Apellido2 5', 'Nombre 5', FALSE), 
+('00000006Y', 'Apellido1 6', 'Apellido2 6', 'Nombre 6', TRUE),
+('00000007Y', 'Apellido1 7', 'Apellido2 7', 'Nombre 7', FALSE),
+('00000008Y', 'Apellido1 8', 'Apellido2 8', 'Nombre 8', FALSE),
+('00000009Y', 'Apellido1 9', 'Apellido2 9', 'Nombre 9', FALSE),
+('00000010Y', 'Apellido1 10', 'Apellido2 10', 'Nombre 10', FALSE),
+('00000011Y', 'Apellido1 11', 'Apellido2 11', 'Nombre 11', TRUE),
+('00000012Y', 'Apellido1 12', 'Apellido2 12', 'Nombre 12', FALSE),
+('00000013Y', 'Apellido1 13', 'Apellido2 13', 'Nombre 13', FALSE),
+('00000014Y', 'Apellido1 14', 'Apellido2 14', 'Nombre 14', FALSE);
 
 INSERT INTO PEDIDOS (CODIGO, FECHA_HORA, DNI_EMPLEADO, ESTADO) VALUES
 (10, '2019-03-24', '37667523F', 'ENTREGADO'),

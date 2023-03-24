@@ -2,7 +2,11 @@ package com.sinensia.polloshermanos.backend.business.services;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import com.sinensia.polloshermanos.backend.business.model.Empleado;
+import com.sinensia.polloshermanos.backend.business.model.dtos.EmpleadoDTO1;
+import com.sinensia.polloshermanos.backend.business.model.dtos.EmpleadoDTO2;
 
 public interface EmpleadoServices {
 
@@ -56,5 +60,23 @@ public interface EmpleadoServices {
 	
 	int getNumeroTotalEmpleados();
 	int getNumeroTotalEmpleadosActivos();
+	
+	// *************************************************************************
+	//
+	// DTOs
+	//
+	// *************************************************************************
+	
+	public List<EmpleadoDTO1> getEmpleadosDTO1();
+	public List<EmpleadoDTO2> getEmpleadosDTO2();
+	
+	// *************************************************************************
+	//
+	// Paginas
+	//
+	// *************************************************************************
+	
+	Page<Empleado> getPage(int numeroPagina, int numeroElementos);
+	
 	
 }

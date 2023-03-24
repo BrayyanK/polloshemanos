@@ -1,14 +1,19 @@
 package com.sinensia.polloshermanos.backend.business.services.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.sinensia.polloshermanos.backend.business.model.Empleado;
+import com.sinensia.polloshermanos.backend.business.model.dtos.EmpleadoDTO1;
+import com.sinensia.polloshermanos.backend.business.model.dtos.EmpleadoDTO2;
 import com.sinensia.polloshermanos.backend.business.services.EmpleadoServices;
 import com.sinensia.polloshermanos.backend.integration.repositories.EmpleadoRepository;
 
@@ -79,5 +84,27 @@ public class EmpleadoServicesImpl implements EmpleadoServices{
 	public int getNumeroTotalEmpleadosActivos() {
 		return (int) empleadoRepository.getNumeroTotalEmpleados(true);
 	}
+	
+	@Override
+	public List<EmpleadoDTO1> getEmpleadosDTO1() {
+		
+		return empleadoRepository.getNombresCompletosEmpleados().stream()
+				.map(x -> {
+					EmpleadoDTO1 empleadoDTO1 = new EmpleadoDTO1();
+					empleadoDTO1.setNombreCompleto(x);
+					return empleadoDTO1;
+				  })
+		.collect(Collectors.toList());
+		
+	}
+	
+	@Override
+	public List<EmpleadoDTO2> getEmpleadosDTO2() {
+		return empleadoRepository.getEmpleadosDTO2();
+	}
 
+	@Override
+	public Page<Empleado> getPage(int numeroPagina, int numeroElementos) {
+		return empleadoRepository.findPage(PageRequest.of(numeroPagina, numeroElementos));
+	}
 }
