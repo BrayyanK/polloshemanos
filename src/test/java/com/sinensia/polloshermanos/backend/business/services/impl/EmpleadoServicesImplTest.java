@@ -15,7 +15,7 @@ import com.sinensia.polloshermanos.backend.business.model.Empleado;
 import com.sinensia.polloshermanos.backend.business.services.EmpleadoServices;
 
 @SpringBootTest
-@Sql(scripts = {"/data/h2/schema.sql", "/data/h2/data.sql"})
+@Sql(scripts = {"/data/h2/schema_test.sql", "/data/h2/data_test.sql"})
 class EmpleadoServicesImplTest {
 
 	@Autowired
