@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import com.sinensia.polloshermanos.backend.business.model.Familia;
@@ -25,4 +26,13 @@ public interface ProductoRepository extends JpaRepository<Producto, Long>{
 	@Query("SELECT COUNT(p) FROM Producto p WHERE p.familia = :familia")
 	long getNumeroTotalProductosByFamilia(Familia familia);
 	
+	@Query("SELECT p.familia, COUNT(p) FROM Producto p GROUP BY p.familia")
+	List<Object[]> getEstadisticaNumeroProductosPorFamilia();
+	
+	@Query("SELECT p.familia, AVG(p.precio) FROM Producto p GROUP BY p.familia")
+	List<Object[]> getEstadisticaPreciomedioProductosPorFamilia();
+	
+	@Modifying
+	@Query("UPDATE Producto p SET p.precio = p.precio + ((p.precio * :incremento) / 100) WHERE p.familia = :familia")
+	void incrementarPrecios(Familia familia, Double incremento);
 }

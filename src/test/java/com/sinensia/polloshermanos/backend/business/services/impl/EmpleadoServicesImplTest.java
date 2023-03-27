@@ -1,36 +1,40 @@
 package com.sinensia.polloshermanos.backend.business.services.impl;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import java.util.Arrays;
 import java.util.List;
-
+import java.util.Optional;
+import java.util.ArrayList;
+import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 
 import com.sinensia.polloshermanos.backend.business.model.Empleado;
 import com.sinensia.polloshermanos.backend.business.model.dtos.EmpleadoDTO1;
 import com.sinensia.polloshermanos.backend.business.model.dtos.EmpleadoDTO2;
-import com.sinensia.polloshermanos.backend.business.services.EmpleadoServices;
+import com.sinensia.polloshermanos.backend.integration.repositories.EmpleadoRepository;
 
-@SpringBootTest
-@Sql(scripts = {"/data/h2/schema_test.sql", "/data/h2/data_test.sql"})
+@ExtendWith(MockitoExtension.class)
 class EmpleadoServicesImplTest {
 
-	@Autowired
-	private EmpleadoServices empleadoServices;
+	@Mock
+	private EmpleadoRepository empleadoRepository;
 	
-	private Empleado e1;
-	private Empleado e2;
-	private Empleado e3;
-	private Empleado e4;
+	@InjectMocks
+	private EmpleadoServicesImpl empleadoServices;
 	
 	@BeforeEach
-	void beforeEach() {
-		init();
+	void setUp() throws Exception {
 	}
 
 	@Test
@@ -48,6 +52,11 @@ class EmpleadoServicesImplTest {
 	
 	@Test
 	void creamos_empleado_con_dni_existente() {
+		
+		Empleado e1 = new Empleado();
+		e1.setDni("37667523F");
+		
+		when(empleadoRepository.existsById("37667523F")).thenReturn(true);
 		
 		Exception exception = assertThrows(IllegalStateException.class, () -> {
 			empleadoServices.create(e1);
@@ -68,43 +77,39 @@ class EmpleadoServicesImplTest {
 		empleado.setApellido2("Apellido2 Nuevo");
 		empleado.setActivo(true);
 		
+		when(empleadoRepository.existsById("55555555R")).thenReturn(false);
+		
 		empleadoServices.create(empleado);
 		
-		int numeroEmpleados = empleadoServices.getNumeroTotalEmpleados();
-		
-		assertEquals(5, numeroEmpleados);
-		
-		empleado = null;
-		
-		empleado = empleadoServices.read("55555555R");
-		
-		assertNotNull(empleado);
-		assertEquals("55555555R", empleado.getDni());
-		assertEquals("Nombre Nuevo", empleado.getNombre());
-		assertEquals("Apellido1 Nuevo", empleado.getApellido1());
-		assertEquals("Apellido2 Nuevo", empleado.getApellido2());
-		assertTrue(empleado.isActivo());
-		
+		verify(empleadoRepository, times(1)).save(empleado);
 	}
 
+	
 	@Test
 	void read_empleado_existente() {
 		
-		Empleado empleado = empleadoServices.read("45899212H");
+		Empleado empleado = new Empleado();
+		empleado.setDni("11111111R");
+		empleado.setNombre("Nombre Empleado");
+		
+		when(empleadoRepository.findById("11111111R")).thenReturn(Optional.of(empleado));
+		
+		empleado = null;
+		
+		empleado = empleadoServices.read("11111111R");
 		
 		assertNotNull(empleado);
-		assertEquals("45899212H", empleado.getDni());
-		assertEquals("Anna", empleado.getNombre());
-		assertEquals("Roca", empleado.getApellido1());
-		assertEquals("Arderiu", empleado.getApellido2());
-		assertTrue(empleado.isActivo());
+		assertEquals("Nombre Empleado", empleado.getNombre());
+		
 	}
 	
 	@Test
 	void read_empleado_no_existente() {
 		
+		when(empleadoRepository.findById("11111111R")).thenReturn(Optional.empty());
+	
 		Empleado empleado = empleadoServices.read("11111111R");
-		
+	
 		assertNull(empleado);
 		
 	}
@@ -125,7 +130,9 @@ class EmpleadoServicesImplTest {
 	void actualizamos_empleado_con_dni_no_existente() {
 		
 		Empleado empleado = new Empleado();
-		empleado.setDni("55555555R");
+		empleado.setDni("11111111R");
+		
+		when(empleadoRepository.existsById("11111111R")).thenReturn(false);
 		
 		Exception exception = assertThrows(IllegalStateException.class, () -> {
 			empleadoServices.update(empleado);
@@ -133,119 +140,143 @@ class EmpleadoServicesImplTest {
 		
 		String message = exception.getMessage();
 		
-		assertEquals("El empleado 55555555R no existe", message);
+		assertEquals("El empleado 11111111R no existe", message);
+		
 	}
 	
 	@Test
 	void actualizamos_empleado_ok() {
 		
-		e1.setNombre("NOMBRE ACTUALIZADO");
-		e1.setApellido1("APELLIDO1 ACTUALIZADO");
-		e1.setApellido2("APELLIDO2 ACTUALIZADO");
-		e1.setActivo(false);
+		Empleado empleado = new Empleado();
+		empleado.setDni("11111111R");
 		
-		empleadoServices.update(e1);
+		when(empleadoRepository.existsById("11111111R")).thenReturn(true);
 		
-		e1 = null;
+		empleadoServices.update(empleado);
 		
-		e1 = empleadoServices.read("37667523F");
-		
-		assertNotNull(e1);
-		assertEquals("NOMBRE ACTUALIZADO", e1.getNombre());
-		assertEquals("APELLIDO1 ACTUALIZADO", e1.getApellido1());
-		assertEquals("APELLIDO2 ACTUALIZADO", e1.getApellido2());
-		assertFalse(e1.isActivo());
-		
+		verify(empleadoRepository, times(1)).save(empleado);
 	}
-	
+
 	@Test
 	void testFindAll() {
 		
-		List<Empleado> empleadosEsperados = Arrays.asList(e1, e2, e3, e4);
+		Empleado empleado1 = new Empleado();
+		Empleado empleado2 = new Empleado();
+		empleado1.setDni("11111111R");
+		empleado2.setDni("22222222T");
+		
+		when(empleadoRepository.findAll()).thenReturn(Arrays.asList(empleado1, empleado2));
 		
 		List<Empleado> empleados = empleadoServices.findAll();
 		
 		assertNotNull(empleados);
-		assertEquals(4, empleados.size());
-		assertTrue(empleados.containsAll(empleadosEsperados));
+		assertEquals(2, empleados.size());
 		
 	}
 
 	@Test
 	void testFindByNombreLikeIgnoreCase() {
 		
-		List<Empleado> empleadosEsperados = Arrays.asList(e2, e3);
+		Empleado empleado1 = new Empleado();
+		Empleado empleado2 = new Empleado();
+		empleado1.setDni("11111111R");
+		empleado2.setDni("22222222T");
 		
-		List<Empleado> empleados = empleadoServices.findByNombreLikeIgnoreCase("an");
+		when(empleadoRepository.findByNombreContainingIgnoreCase("Fo")).thenReturn(Arrays.asList(empleado1, empleado2));
+		
+		List<Empleado> empleados = empleadoServices.findByNombreLikeIgnoreCase("Fo");
 		
 		assertNotNull(empleados);
 		assertEquals(2, empleados.size());
-		assertTrue(empleados.containsAll(empleadosEsperados));
-		
 	}
 
 	@Test
 	void testGetNumeroTotalEmpleados() {
 		
-		int numeroEmpleadosActivos = empleadoServices.getNumeroTotalEmpleados();
+		when(empleadoRepository.count()).thenReturn(26895L);
 		
-		assertEquals(4, numeroEmpleadosActivos);
+		int numeroTotalEmpleados = empleadoServices.getNumeroTotalEmpleados();
+		
+		assertEquals(26895, numeroTotalEmpleados);
 	}
 
 	@Test
 	void testGetNumeroTotalEmpleadosActivos() {
 		
-		int numeroEmpleadosActivos = empleadoServices.getNumeroTotalEmpleadosActivos();
+		when(empleadoRepository.getNumeroTotalEmpleados(true)).thenReturn(567L);
 		
-		assertEquals(3, numeroEmpleadosActivos);
+		int numeroTotalEmpleadosActivos = empleadoServices.getNumeroTotalEmpleadosActivos();
+		
+		assertEquals(567, numeroTotalEmpleadosActivos);
 		
 	}
-	
+
 	@Test
-	void testListadoEmpleadoDTO1() {
-		EmpleadoDTO1 empleadoDTO1 = new EmpleadoDTO1();
-		empleadoDTO1.setNombreCompleto("CIFUENTES MERINO, CARLOTA");
+	void testGetEmpleadosDTO1() {
+		
+		List<String> nombresEmpleados = new ArrayList<>();
+		
+		nombresEmpleados.add("MARTÍN SALVADOR, HONORIO");
+		nombresEmpleados.add("CIFUENTES MERINO, CARLOTA");
+		nombresEmpleados.add("GÁLVEZ RIDRUEJO, PEPÍN");
+		
+		List<EmpleadoDTO1> empleadosDTO1Esperados = new ArrayList<>();
+		
+		EmpleadoDTO1 empleadoDTO11 = new EmpleadoDTO1();
+		EmpleadoDTO1 empleadoDTO12 = new EmpleadoDTO1();
+		EmpleadoDTO1 empleadoDTO13 = new EmpleadoDTO1();
+		
+		empleadoDTO11.setNombreCompleto("MARTÍN SALVADOR, HONORIO");
+		empleadoDTO12.setNombreCompleto("CIFUENTES MERINO, CARLOTA");
+		empleadoDTO13.setNombreCompleto("GÁLVEZ RIDRUEJO, PEPÍN");
+		
+		empleadosDTO1Esperados.add(empleadoDTO11);
+		empleadosDTO1Esperados.add(empleadoDTO12);
+		empleadosDTO1Esperados.add(empleadoDTO13);
+		
+		when(empleadoRepository.getNombresCompletosEmpleados()).thenReturn(nombresEmpleados);
 		
 		List<EmpleadoDTO1> empleadosDTO1 = empleadoServices.getEmpleadosDTO1();
 		
 		assertNotNull(empleadosDTO1);
-		assertEquals(4, empleadosDTO1.size());
-	
-		assertTrue(empleadosDTO1.contains(empleadoDTO1));
-		
+		assertEquals(3, empleadosDTO1.size());
+		assertTrue(empleadosDTO1.containsAll(empleadosDTO1Esperados));
 	}
-	
+
 	@Test
-	void testListadoEmpleadoDTO2() {
+	void testGetEmpleadosDTO2() {
 		
-		EmpleadoDTO2 empleadoDTO2 = new EmpleadoDTO2("37667523F", "Cifuentes", "Merino", "Carlota");
+		EmpleadoDTO2 empleadoDTO21 = new EmpleadoDTO2("11111111R","Apellido1 1","Apellido2 1","Nombre 1");
+		EmpleadoDTO2 empleadoDTO22 = new EmpleadoDTO2("22222222T","Apellido1 2","Apellido2 2","Nombre 2");
+		
+		List<EmpleadoDTO2> empleadosDTO2Esperados = Arrays.asList(empleadoDTO21, empleadoDTO22);
+		
+		when(empleadoRepository.getEmpleadosDTO2()).thenReturn(Arrays.asList(empleadoDTO21, empleadoDTO22));
 		
 		List<EmpleadoDTO2> empleadosDTO2 = empleadoServices.getEmpleadosDTO2();
 		
 		assertNotNull(empleadosDTO2);
-		assertEquals(4, empleadosDTO2.size());
-	
-		assertTrue(empleadosDTO2.contains(empleadoDTO2));
+		assertEquals(2, empleadosDTO2.size());
+		assertTrue(empleadosDTO2.containsAll(empleadosDTO2Esperados));
 		
 	}
-	
-	// *************************************************************************
-	//
-	// PRIVATE METHODS
-	//
-	// *************************************************************************
 
-	private void init() {
+	@Test
+	void testGetPage() {
 		
-		e1 = new Empleado();
-		e2 = new Empleado();
-		e3 = new Empleado();
-		e4 = new Empleado();
+		Empleado empleado1 = new Empleado();
+		Empleado empleado2 = new Empleado();
+		empleado1.setDni("11111111R");
+		empleado2.setDni("22222222T");
+		List<Empleado> empleados = Arrays.asList(empleado1, empleado2);
 		
-		e1.setDni("37667523F");
-		e2.setDni("45899212H");
-		e3.setDni("20098127Y");
-		e4.setDni("19822376G");
-
+		when(empleadoRepository.findPage(PageRequest.of(0, 2))).thenReturn(new PageImpl<>(empleados));
+		
+		Page<Empleado> pagina = empleadoServices.getPage(0, 2);
+		
+		assertNotNull(pagina);
+		assertTrue(pagina.getContent().containsAll(empleados));
+		
 	}
+
 }

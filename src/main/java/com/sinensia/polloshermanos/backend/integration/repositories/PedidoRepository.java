@@ -12,7 +12,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 
 	List<Pedido> findByEstado(EstadoPedido estado);
 	
-	
 	List<Pedido> findByEmpleadoDniAndFechaHoraBetween(String dni, Date desde, Date hasta);
 	
 }

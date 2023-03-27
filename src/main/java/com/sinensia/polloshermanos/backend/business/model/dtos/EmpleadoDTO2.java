@@ -1,6 +1,7 @@
 package com.sinensia.polloshermanos.backend.business.model.dtos;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class EmpleadoDTO2 implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -16,6 +17,23 @@ public class EmpleadoDTO2 implements Serializable {
 
 	public String getFichaEmpleado() {
 		return fichaEmpleado;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(fichaEmpleado);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EmpleadoDTO2 other = (EmpleadoDTO2) obj;
+		return Objects.equals(fichaEmpleado, other.fichaEmpleado);
 	}
 
 }

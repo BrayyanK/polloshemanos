@@ -2,13 +2,13 @@ package com.sinensia.polloshermanos.backend.business.services.impl;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.sinensia.polloshermanos.backend.business.model.Familia;
@@ -17,7 +17,6 @@ import com.sinensia.polloshermanos.backend.business.services.ProductoServices;
 import com.sinensia.polloshermanos.backend.integration.repositories.ProductoRepository;
 
 @Service
-@Primary
 public class ProductoServicesImpl implements ProductoServices {
 
 	@Autowired
@@ -83,9 +82,9 @@ public class ProductoServicesImpl implements ProductoServices {
 	}
 
 	@Override
+	@Transactional
 	public void incrementarPreciosByFamilia(Familia familia, double incremento) {
-		// TODO Auto-generated method stub
-		
+		productoRepository.incrementarPrecios(familia, incremento);	
 	}
 
 	@Override
@@ -100,14 +99,38 @@ public class ProductoServicesImpl implements ProductoServices {
 
 	@Override
 	public Map<Familia, Integer> getEstadisticaNumeroProductosByFamilia() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Map<Familia, Integer> estadistica = new HashMap<>();
+		
+		Arrays.asList(Familia.values()).stream().forEach(x -> estadistica.put(x, 0));
+		
+		List<Object[]> resultados = productoRepository.getEstadisticaNumeroProductosPorFamilia();
+		
+		resultados.stream().forEach(x -> {
+			Familia familia = (Familia)x[0];
+			Integer cuenta  =   ((Long)x[1]).intValue();
+			estadistica.replace(familia, cuenta);
+		});
+		
+		return estadistica;
 	}
 
 	@Override
 	public Map<Familia, Double> getEstadisticaPrecioMedioProductosByFamilia() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		Map<Familia, Double> estadistica = new HashMap<>();
+		
+		Arrays.asList(Familia.values()).stream().forEach(x -> estadistica.put(x, null));
+		
+		List<Object[]> resultados = productoRepository.getEstadisticaPreciomedioProductosPorFamilia();
+		
+		resultados.stream().forEach(x -> {
+			Familia familia = (Familia)x[0];
+			Double cuenta   =  (Double)x[1];
+			estadistica.replace(familia, cuenta);
+		});
+		
+		return estadistica;
 	}
 
 	@Override

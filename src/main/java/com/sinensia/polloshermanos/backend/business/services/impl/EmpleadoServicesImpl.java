@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,6 @@ import com.sinensia.polloshermanos.backend.business.services.EmpleadoServices;
 import com.sinensia.polloshermanos.backend.integration.repositories.EmpleadoRepository;
 
 @Service
-@Primary
 public class EmpleadoServicesImpl implements EmpleadoServices{
 
 	@Autowired
@@ -94,7 +92,7 @@ public class EmpleadoServicesImpl implements EmpleadoServices{
 					empleadoDTO1.setNombreCompleto(x);
 					return empleadoDTO1;
 				  })
-		.collect(Collectors.toList());
+				.collect(Collectors.toList());
 		
 	}
 	
