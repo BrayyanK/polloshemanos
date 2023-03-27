@@ -1,7 +1,10 @@
 package com.sinensia.polloshermanos.backend.business.services.impl;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -20,15 +23,20 @@ public class PedidoServicesImpl implements PedidoServices{
 	private PedidoRepository pedidoRepository;
 	
 	@Override
+	@Transactional
 	public Pedido create(Pedido pedido) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(pedido.getCodigo() != null) {
+			throw new IllegalStateException("Para crear un pedido el código ha de ser null");
+		}
+	
+		return pedidoRepository.save(pedido);
+		
 	}
 
 	@Override
 	public Pedido read(Long codigo) {
-		// TODO Auto-generated method stub
-		return null;
+		return pedidoRepository.findById(codigo).orElse(null);
 	}
 
 	@Override
@@ -74,20 +82,17 @@ public class PedidoServicesImpl implements PedidoServices{
 
 	@Override
 	public List<Pedido> findByEstado(EstadoPedido estado) {
-		// TODO Auto-generated method stub
-		return null;
+		return pedidoRepository.findByEstado(estado);
 	}
 
 	@Override
 	public List<Pedido> findByEmpleadoBetweenDates(String dni, Date desde, Date hasta) {
-		// TODO Auto-generated method stub
-		return null;
+		return pedidoRepository.findByEmpleadoDniAndFechaHoraBetween(dni, desde, hasta);
 	}
 
 	@Override
 	public List<EstadoPedido> getEstados() {
-		// TODO Auto-generated method stub
-		return null;
+		return Arrays.asList(EstadoPedido.values());
 	}
 
 }
