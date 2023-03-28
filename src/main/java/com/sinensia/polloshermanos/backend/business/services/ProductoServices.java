@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.sinensia.polloshermanos.backend.business.model.Familia;
 import com.sinensia.polloshermanos.backend.business.model.Producto;
+import com.sinensia.polloshermanos.backend.business.model.dtos.ProductoDTO1;
 
 public interface ProductoServices {
 
@@ -35,5 +36,7 @@ public interface ProductoServices {
 	Map<Familia, Double> getEstadisticaPrecioMedioProductosByFamilia();
 	
 	List<Familia> getFamilias();
+	
+	List<ProductoDTO1> getProductosDTO1();
 
 }

@@ -81,10 +81,4 @@ public class Empleado implements Serializable {
 		return Objects.equals(dni, other.dni);
 	}
 
-	@Override
-	public String toString() {
-		return "Empleado [dni=" + dni + ", nombre=" + nombre + ", apellido1=" + apellido1 + ", apellido2=" + apellido2
-				+ ", activo=" + activo + "]";
-	}
-
 }

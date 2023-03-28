@@ -35,4 +35,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long>{
 	@Modifying
 	@Query("UPDATE Producto p SET p.precio = p.precio + ((p.precio * :incremento) / 100) WHERE p.familia = :familia")
 	void incrementarPrecios(Familia familia, Double incremento);
+	
+	@Query("SELECT p.codigo , CONCAT('[', p.familia, ']', ' ', p.nombre, ' (', p.precio,')') FROM Producto p")
+	List<Object[]> getProductosDTO1();
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.sinensia.polloshermanos.backend.business.model.Producto;
+import com.sinensia.polloshermanos.backend.business.model.dtos.ProductoDTO1;
 import com.sinensia.polloshermanos.backend.business.services.ProductoServices;
 import com.sinensia.polloshermanos.backend.presentation.config.PresentationException;
 
@@ -28,61 +29,52 @@ public class ProductoController {
 	private ProductoServices productoServices;
 
 	@GetMapping
-	public List<Producto> getAll(){
+	public List<Producto> getAll() {
 		return productoServices.findAll();
 	}
-	
+
 	@GetMapping("/{codigo}")
 	public Producto getByCodigo(@PathVariable Long codigo) {
-		
+
 		Producto producto = productoServices.read(codigo);
-		
-		if(producto == null) {
+
+		if (producto == null) {
 			throw new PresentationException("No existe el producto con código [" + codigo + "]", HttpStatus.NOT_FOUND);
 		}
-		
+
 		return producto;
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody Producto producto, UriComponentsBuilder ucb){
-		
+	public ResponseEntity<?> create(@RequestBody Producto producto, UriComponentsBuilder ucb) {
+
 		Long codigo = null;
-		
+
 		try {
 			Producto createdProducto = productoServices.create(producto);
 			codigo = createdProducto.getCodigo();
 		} catch (IllegalStateException e) {
 			throw new PresentationException(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-		
+
 		return ResponseEntity.created(ucb.path("/productos/{codigo}").build(codigo)).build();
 	}
-	
+
 	@PutMapping
-	public ResponseEntity<?> update(@RequestBody Producto producto){
-		
+	public ResponseEntity<?> update(@RequestBody Producto producto) {
+
 		try {
 			productoServices.update(producto);
 		} catch (Exception e) {
 			throw new PresentationException(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-		
+
 		return ResponseEntity.accepted().build();
 	}
-	
-	@DeleteMapping("/productos/{codigo}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void delete(@PathVariable Long codigo) {
-		
-		try {
-			//productoServices.delete(codigo);
-			// TODO Eliminar consistirá en actualizar propiedad descatalogado a TRUE
-		} catch(IllegalStateException e) {
-			throw new PresentationException(e.getMessage(), HttpStatus.NOT_FOUND);
-		}	
+
+	@GetMapping("/dto1")
+	public List<ProductoDTO1> getProductosDTO1() {
+		return productoServices.getProductosDTO1();
 	}
-	
-	
 
 }
