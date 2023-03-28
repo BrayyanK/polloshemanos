@@ -104,7 +104,7 @@ public class PedidoServicesImpl implements PedidoServices{
 		
 		EstadoPedido estadoActual = pedido.getEstado();
 		
-		if(estadoActual != EstadoPedido.PENDIENTE_ENTREGA) {
+		if(estadoActual != EstadoPedido.PENDIENTE_ENTEGA) {
 			throw new IllegalStateException("No se puede pasar de estado [" + estadoActual + "] a [" + EstadoPedido.ENTREGADO + "]");
 		}
 		
@@ -127,10 +127,10 @@ public class PedidoServicesImpl implements PedidoServices{
 		EstadoPedido estadoActual = pedido.getEstado();
 		
 		if(estadoActual != EstadoPedido.EN_PROCESO) {
-			throw new IllegalStateException("No se puede pasar de estado [" + estadoActual + "] a [" + EstadoPedido.PENDIENTE_ENTREGA + "]");
+			throw new IllegalStateException("No se puede pasar de estado [" + estadoActual + "] a [" + EstadoPedido.PENDIENTE_ENTEGA + "]");
 		}
 		
-		pedido.setEstado(EstadoPedido.PENDIENTE_ENTREGA);
+		pedido.setEstado(EstadoPedido.PENDIENTE_ENTEGA);
 		
 	}
 	@Override
