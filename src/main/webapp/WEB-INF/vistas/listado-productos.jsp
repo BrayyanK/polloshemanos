@@ -9,9 +9,9 @@
 <link rel="stylesheet" type="text/css" href="../estilos.css" />
 </head>
 <body>
-		<h1>Listado de Productos</h1>
+	<jsp:include page="header.jsp"/>
 
-
+		<h2>Listado de productos</h2>
 		<table class="tabla">
 			<tr>
 				<th>Codigo</th>
@@ -19,9 +19,13 @@
 				<th>Activo</th>
 			</tr>
 			<c:forEach var="producto" items="${productos}">
-			<tr>
+				<tr>
 				<td>${producto.codigo}</td>
-				<td>${producto.nombre} ${producto.descripcion} ${producto.fechaAlta} ${producto.precio} ${producto.familia} </td>
+				<td>${producto.nombre}  </td>
+				<td>${producto.descripcion}</td>
+				<td>${producto.fechaAlta}</td>
+				<td>${producto.precio}</td>
+				<td>${producto.familia}</td>
 				<td>${producto.descatalogado}</td>
 			</tr>
 			</c:forEach>

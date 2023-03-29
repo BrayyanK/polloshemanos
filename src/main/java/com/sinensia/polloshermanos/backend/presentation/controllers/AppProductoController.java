@@ -31,7 +31,7 @@ public class AppProductoController {
 
 		return mav;
 	}
-	@GetMapping("/listado-productos")
+	@GetMapping("/productos")
 	public ModelAndView getListadoProductos() {
 
 		List<Producto> productos = productoServices.findAll();

@@ -33,7 +33,7 @@ public class AppPedidoController {
 		return mav;
 	}
 
-	@GetMapping("/listado-pedidos")
+	@GetMapping("/pedidos")
 	public ModelAndView getListadoPedidos() {
 
 		List<Pedido> pedidos = pedidoServices.findAll();

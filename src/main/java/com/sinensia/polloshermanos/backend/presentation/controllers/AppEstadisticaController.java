@@ -32,17 +32,17 @@ public class AppEstadisticaController {
 	
 	// http://localhost:8080/polloshermanos/productos?codigo=873555
 	
-	@GetMapping("/productos")
-	public ModelAndView getPaginaProducto(@RequestParam Long codigo) {
-		
-		Producto producto = productoServices.read(codigo);
-		
-		ModelAndView mav = new ModelAndView();
-		
-		mav.setViewName("ficha-producto");
-		mav.addObject("producto", producto);
-		
-		return mav;
-	}
+//	@GetMapping("/productos")
+//	public ModelAndView getPaginaProducto(@RequestParam Long codigo) {
+//		
+//		Producto producto = productoServices.read(codigo);
+//		
+//		ModelAndView mav = new ModelAndView();
+//		
+//		mav.setViewName("ficha-producto");
+//		mav.addObject("producto", producto);
+//		
+//		return mav;
+//	}
 	
 }

@@ -9,9 +9,9 @@
 <link rel="stylesheet" type="text/css" href="../estilos.css" />
 </head>
 <body>
-	<h1>Listado de empleados</h1>
+	<jsp:include page="header.jsp"/>
 
-
+	<h2>Listado de empleados</h2>
 	<table class="tabla">
 		<tr>
 			<th>DNI</th>

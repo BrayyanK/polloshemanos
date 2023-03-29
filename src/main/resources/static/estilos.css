@@ -21,3 +21,8 @@
   background-color: #04AA6D;
   color: white;
 }
+
+#idCabecera {
+	background-color: orange;
+	padding: 0.2%;
+}

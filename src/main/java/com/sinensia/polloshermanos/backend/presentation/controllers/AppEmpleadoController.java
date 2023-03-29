@@ -31,14 +31,14 @@ public class AppEmpleadoController {
 		return mav;
 	}
 
-	@GetMapping("/listado-empleados")
+	@GetMapping("/empleados")
 	public ModelAndView getListadoEmpleados() {
 
 		List<Empleado> empleados = empleadoServices.findAll();
 
 		ModelAndView mav = new ModelAndView();
-		mav.setViewName("listado-empleados");
-		mav.addObject("empleados", empleados);
+		mav.setViewName("listado-empleados");	// view
+		mav.addObject("empleados", empleados);  // model
 
 		return mav;
 	}
