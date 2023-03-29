@@ -17,7 +17,7 @@ public class SwaggerConfig {
 	public Docket connection() {
 		
 		return new Docket(DocumentationType.SWAGGER_2).select()
-				.apis(RequestHandlerSelectors.basePackage("com.sinensia.polloshermanos.backend.presentation.controllers"))
+				.apis(RequestHandlerSelectors.basePackage("com.sinensia.polloshermanos.backend.presentation.restcontrollers"))
 				.paths(PathSelectors.any())   
 				.build();
 		

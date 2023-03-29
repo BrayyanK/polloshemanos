@@ -15,7 +15,7 @@ public class LogAspectConfig {
 
 	private Logger logger = LoggerFactory.getLogger(LogAspectConfig.class);
 	
-	@Before(value="execution(* com.sinensia.polloshermanos.backend.presentation.controllers.*.*(..))")
+	@Before(value="execution(* com.sinensia.polloshermanos.backend.presentation.restcontrollers.*.*(..))")
 	public void logPresentationLayer(JoinPoint joinPoint) {
 		crearLog("Presentation Layer", joinPoint);
 	}

@@ -16,6 +16,6 @@ public interface PedidoRepository extends JpaRepository<Pedido, Long> {
 	
 	List<Pedido> findByEmpleadoDniAndFechaHoraBetween(String dni, Date desde, Date hasta);
 
-	Page<Pedido> findUltimosNPendientesDeEntrega(PageRequest of);
+	//Page<Pedido> findUltimosNPendientesDeEntrega(PageRequest of);
 	
 }

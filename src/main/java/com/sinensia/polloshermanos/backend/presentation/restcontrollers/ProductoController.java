@@ -1,4 +1,4 @@
-package com.sinensia.polloshermanos.backend.presentation.controllers;
+package com.sinensia.polloshermanos.backend.presentation.restcontrollers;
 
 import java.util.List;
 

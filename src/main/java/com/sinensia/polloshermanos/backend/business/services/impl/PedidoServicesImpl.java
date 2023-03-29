@@ -140,9 +140,10 @@ public class PedidoServicesImpl implements PedidoServices{
 	@Override
 	public List<Pedido> findUltimosPendientesRecogida(int ultimos) {
 		
-		Page<Pedido> page = pedidoRepository.findUltimosNPendientesDeEntrega(PageRequest.of(0, ultimos));
+	//	Page<Pedido> page = pedidoRepository.findUltimosNPendientesDeEntrega(PageRequest.of(0, ultimos));
 		
-		return page.getContent();
+	//	return page.getContent();
+		return null;
 	}
 	@Override
 	public List<Pedido> findByEstado(EstadoPedido estado) {
