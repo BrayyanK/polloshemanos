@@ -16,8 +16,12 @@
 		<table class="tabla">
 			<tr>
 				<th>Codigo</th>
-				<th>Descripción</th>
-				<th>Activo</th>
+				<th>Nombre</th>
+				<th>Descripcion</th>
+				<th>Fecha</th>
+				<th>Precio</th>
+				<th>Familia</th>
+				<th>Estado</th>
 			</tr>
 			<c:forEach var="producto" items="${productos}">
 				<tr>
@@ -27,10 +31,12 @@
 				<td><fmt:formatDate pattern="dd/MM/yyyy" value="${producto.fechaAlta}" /></td>
 				<td>${producto.precio}</td>
 				<td>${producto.familia}</td>
-				<td>${producto.descatalogado}</td>
 				<td>
 					<c:if test="${producto.descatalogado}">
 						<span style="color:red;">DESCATALOGADO</span>
+					</c:if>
+					<c:if test="${!producto.descatalogado}">
+						<span style="color:green;">CATALOGADO</span>
 					</c:if>
 				</td>
 			</tr>
