@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,23 +11,23 @@
 <body>
 	<jsp:include page="header.jsp"/>
 
-	<h2>Listado de empleados</h2>
+	<h2>Estadisticas</h2>
 	<table class="tabla">
 		<tr>
-			<th>DNI</th>
-			<th>Nombre Completo</th>
-			<th>Activo</th>
+			<th>Familia</th>
+			<th>Numero de Productos</th>
+			<th>Precio Medio</th>
 		</tr>
-		<c:forEach var="empleado" items="${empleados}">
+		<c:forEach var="familia" items="${familias}">
 			<tr>
-				<td>${empleado.dni}</td>
-				<td>${empleado.nombre}${empleado.apellido1}
-					${empleado.apellido2}</td>
-				<td>
-					<c:if test="${empleado.activo}">
-						<span style="color:green;">ACTIVO</span>
+				<td>${familia}</td>
+				<td>${familiaNumProductosMap[familia]}</td>
+				<td>${familiaNumPrecio[familia]}
+					<c:if test="${familiaNumPrecio[familia]==null}">
+						<span>0</span>
 					</c:if>
 				</td>
+				
 			</tr>
 		</c:forEach>
 	</table>

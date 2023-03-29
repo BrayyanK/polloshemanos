@@ -1,1 +1,22 @@
-Probando si funciona el Git
+=======
+
+1.- En el listado de empleados, mostar solo el mensaje "ACTIVO" en verde para aquellos empleados que están activos
+2.- Incluir la página de pedidos
+2.- Incluir la página de listado pedidos (con información básica)
+
+3.- Incluir la página de estadísticas. En esta página deberán aparecer las siguientes estadísticas:
+
+	- número total de productos
+	- tabla con número total de productos por familia y precios medios.
+
+	FAMILIA		NUMERO DE  PRODUCTOS	PRECIO MEDIO
+
+	CAFE                          12             2.0
+	COMIDA						 108            11.4
+	... 
+
+
+OPCIONAL
+
+OPCIONAL
+- En la página del listado de pedidos, podemos incluir un link para abrir el pedido y ver su detalle (ADVANCED)
