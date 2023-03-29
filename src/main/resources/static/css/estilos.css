@@ -23,6 +23,12 @@
 }
 
 #idCabecera {
-	background-color: red;
+	background-color: rgb(91, 207, 180);
 	padding: 0.2%;
+	font-size: 20px;
+  font-weight: 200;
+  background-clip: text;
+}
+a:hover {
+  background-color: white;
 }
